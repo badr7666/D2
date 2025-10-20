@@ -1,0 +1,17 @@
+{
+  "name": "CloudShop Inventory",
+  "slug": "cloudshop-inventory-flat",
+  "version": "0.1.3",
+  "released_at": "2025-10-20",
+  "author": "إصدار موقع 2",
+  "license": "MIT",
+  "description": "نسخة بمجلد واحد فقط (بدون مجلدات فرعية) — جرد مواد مع Supabase.",
+  "keywords": [
+    "inventory",
+    "supabase",
+    "flat",
+    "auth",
+    "crud",
+    "webapp"
+  ]
+}

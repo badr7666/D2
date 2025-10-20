@@ -1,0 +1,18 @@
+
+<!doctype html>
+<html lang="ar" dir="rtl">
+<meta charset="utf-8">
+<title>CloudShop Inventory — توجيه</title>
+<script>
+  (function(){
+    var path = window.location.pathname || "/";
+    var parts = path.split('/').filter(Boolean);
+    var base = "/";
+    if (parts.length > 0) base = "/" + parts[0] + "/";
+    // إذا كنا على نطاق مخصص بدون مجلد، سيعمل login.html مباشرة
+    var target = (path.indexOf("/login.html") === -1) ? (base + "login.html") : path;
+    window.location.replace(target);
+  })();
+</script>
+<noscript><meta http-equiv="refresh" content="0; url=login.html"></noscript>
+</html>

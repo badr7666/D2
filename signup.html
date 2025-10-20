@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>تسجيل حساب جديد - CloudShop Inventory</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="version.js" defer></script>
+  <script src="auth.js" defer></script>
+</head>
+<body>
+  <div class="container">
+    <h1>تسجيل حساب جديد</h1>
+    <p class="notice">أنشئ حسابك لبدء إدارة الجرد.</p>
+    <form id="signupForm" class="row">
+      <div class="col">
+        <label>البريد الإلكتروني</label>
+        <input class="input" type="email" id="email" required>
+      </div>
+      <div class="col">
+        <label>كلمة المرور (8 أحرف على الأقل)</label>
+        <input class="input" type="password" id="password" minlength="8" required>
+      </div>
+      <div class="col">
+        <button class="btn" type="submit">تسجيل</button>
+      </div>
+    </form>
+    <p>لديك حساب؟ <a href="login.html">تسجيل الدخول</a></p>
+    <div class="footer"><span class="version"></span><span>CloudShop</span></div>
+  </div>
+  <script>
+    let supabaseClient;
+    document.addEventListener('DOMContentLoaded', () => {
+      try { supabaseClient = Auth.initSupabase(); }
+      catch(e){ alert('إعداد Supabase غير مكتمل: راجع config.js'); console.error(e); return; }
+      document.getElementById('signupForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+        const { data, error } = await supabaseClient.auth.signUp({
+          email, password,
+          options: { emailRedirectTo: window.location.origin + '/login.html' }
+        });
+        if (error) { alert('تعذر إنشاء الحساب: ' + error.message); return; }
+        if (data.session) { window.location.href = 'login.html'; }
+        else { alert('تم التسجيل! افحص بريدك واضغط رابط التفعيل، ثم سجّل الدخول.'); window.location.href = 'login.html'; }
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>تسجيل الدخول - CloudShop Inventory</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="version.js" defer></script>
+  <script src="auth.js" defer></script>
+</head>
+<body>
+  <div class="container">
+    <h1>تسجيل الدخول</h1>
+    <form id="loginForm" class="row">
+      <div class="col">
+        <label>البريد الإلكتروني</label>
+        <input class="input" type="email" id="email" required>
+      </div>
+      <div class="col">
+        <label>كلمة المرور</label>
+        <input class="input" type="password" id="password" required>
+      </div>
+      <div class="col">
+        <button class="btn" type="submit">دخول</button>
+      </div>
+    </form>
+    <p>جديد؟ <a href="signup.html">أنشئ حساب</a></p>
+    <div class="footer"><span class="version"></span><span>CloudShop</span></div>
+  </div>
+  <script>
+    let supabaseClient;
+    document.addEventListener('DOMContentLoaded', () => {
+      try { supabaseClient = Auth.initSupabase(); }
+      catch(e){ alert('إعداد Supabase غير مكتمل: راجع config.js'); console.error(e); return; }
+      const notice = document.createElement('div');
+      notice.className = 'notice err hidden';
+      document.querySelector('.container').prepend(notice);
+      function showError(msg){ notice.textContent = msg; notice.classList.remove('hidden'); }
+      function q(name){ return document.getElementById(name).value.trim(); }
+      document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = q('email');
+        const password = document.getElementById('password').value;
+        const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+        if (error) {
+          if ((error.message||'').toLowerCase().includes('confirm')) showError('حسابك غير مُفعّل: افحص بريدك واضغط رابط التفعيل.');
+          else showError('فشل الدخول: ' + error.message);
+          return;
+        }
+        window.location.href = 'dashboard.html';
+      });
+    });
+  </script>
+</body>
+</html>
